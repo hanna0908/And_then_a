@@ -1,5 +1,8 @@
 {
   "pages": [
+    "pages/interviewState/main",
+    "pages/interviewList/main",
+    "pages/interviewLocation/main",
     "pages/home/main",
     "pages/addInterview/main"
   ],

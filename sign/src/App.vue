@@ -45,6 +45,7 @@ export default {
   -o-transition: width 2s;
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
 }
 page {
   width: 100%;
