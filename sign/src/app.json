@@ -1,0 +1,12 @@
+{
+  "pages": [
+    "pages/home/main",
+    "pages/addInterview/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "一面而就",
+    "navigationBarTextStyle": "black"
+  }
+}
