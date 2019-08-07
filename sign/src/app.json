@@ -4,7 +4,8 @@
     "pages/interviewState/main",
     "pages/interviewList/main",
     "pages/interviewLocation/main",
-    "pages/addInterview/main"
+    "pages/addInterview/main",
+    "pages/siteList/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

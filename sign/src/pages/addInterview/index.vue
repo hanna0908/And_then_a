@@ -12,11 +12,17 @@
       </li>
       <li>
         <span>面试时间</span>
-        <input type="text" placeholder="2019-08-06 17:00" />
+        <input type="text" placeholder="2019-08-06 17:00" @click="timeChange"/>
+        <view class="section">
+            <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange">
+             <view class="picker"></view>
+        </view>
+  </picker>
+</view>
       </li>
       <li>
         <span>面试地址</span>
-        <input type="text" placeholder="请选择面试地址" />
+        <input type="text" placeholder="请选择面试地址" @click="siteChange" />
       </li>
     </ul>
     <h4>备注信息</h4>
@@ -33,8 +39,52 @@ export default {
   data() {
     return {};
   },
-  computed: {},
-  methods: {},
+  computed: {
+    const date = new Date()
+    const years = []
+    const months = []
+    const days = []
+    for (let i = 1990; i <= date.getFullYear(); i++) {
+      years.push(i)
+    }
+    for (let i = 1 ; i <= 12; i++) {
+      months.push(i)
+    }
+
+    for (let i = 1 ; i <= 31; i++) {
+      days.push(i)
+    }
+
+    Page({
+      data: {
+        years: years,
+        year: date.getFullYear(),
+        months: months,
+        month: 2,
+        days: days,
+        day: 2,
+        value: [9999, 1, 1],
+      },
+      bindChange: function(e) {
+        const val = e.detail.value
+        this.setData({
+          year: this.data.years[val[0]],
+          month: this.data.months[val[1]],
+          day: this.data.days[val[2]]
+        })
+      }
+    })
+  },
+  methods: {
+    siteChange() {
+      wx.navigateTo({
+        url: "/pages/siteList/main"
+      });
+    },
+    timeChange(){
+      
+    }
+  },
   created() {},
   mounted() {}
 };
@@ -44,6 +94,8 @@ export default {
   background: #ffff;
   border-bottom: 1px solid #ccc;
   border-top: 1px solid #ccc;
+  font-size: 36rpx;
+  font-weight: 500;
 }
 .interview li {
   display: flex;
@@ -57,6 +109,7 @@ export default {
   margin-left: 24px;
   height: 100rpx;
   line-height: 100rpx;
+  color: #b0b0b0;
 }
 .interview li:last-child {
   border-bottom: none;
@@ -82,5 +135,6 @@ h4 {
   width: 90%;
   border: 1px solid #9999;
   margin-left: 2rpx;
+  border-radius: 8rpx;
 }
 </style>

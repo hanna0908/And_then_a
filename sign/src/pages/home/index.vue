@@ -2,7 +2,10 @@
   <div class="wrap">
     <map id="map" show-location :longitude="longitude" :latitude="latitude" :markers="markers">
       <cover-view class="location" @click="location">
-        <button>定位</button>
+        <cover-view class="iconfont icon-weizhi" />
+      </cover-view>
+      <cover-view class="user_info">
+        <cover-view class="iconfont icon-ziyuan" />
       </cover-view>
     </map>
 
@@ -36,6 +39,7 @@ export default {
     },
     ...mapActions({
       location: "home/getLocation"
+      
     })
   },
   created() {},
@@ -59,12 +63,32 @@ export default {
 }
 .location {
   position: fixed;
-  bottom: 100rpx;
+  bottom: 140rpx;
   left: 30rpx;
 }
-.footer {
+.user_info {
+  position: fixed;
+  bottom: 140rpx;
+  right: 30rpx;
+  width: 96rpx;
   height: 96rpx;
+  border-radius: 50%;
+  background: #020816;
+}
+.user_info .icon-ziyuan {
+  font-size: 50rpx;
+  color: #197dbf;
+  text-align: center;
   line-height: 96rpx;
+}
+.location .icon-weizhi {
+  color: #197dbf;
+  font-size: 70rpx;
+  font-weight: 600;
+}
+.footer {
+  height: 110rpx;
+  line-height: 110rpx;
   background: #020816;
   color: aliceblue;
   text-align: center;

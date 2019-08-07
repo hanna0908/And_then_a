@@ -11,11 +11,9 @@ export default {
      * 支付宝(蚂蚁)：mpvue === my, mpvuePlatform === 'my'
      */
 
-    console.log('store....',this.$store)
     //调用登录接口
     wx.login({
       success: async res => {
-        console.log("success", res, login(res.code));
         if (res.code) {
           //发起网络请求
           let data = await login(res.code);
