@@ -10,6 +10,8 @@ export default {
      * 百度：mpvue === swan, mpvuePlatform === 'swan'
      * 支付宝(蚂蚁)：mpvue === my, mpvuePlatform === 'my'
      */
+
+    console.log('store....',this.$store)
     //调用登录接口
     wx.login({
       success: async res => {
