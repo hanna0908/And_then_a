@@ -12,13 +12,7 @@
       </li>
       <li>
         <span>面试时间</span>
-        <input type="text" placeholder="2019-08-06 17:00" @click="timeChange"/>
-        <view class="section">
-            <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange">
-             <view class="picker"></view>
-        </view>
-  </picker>
-</view>
+        <input type="text" placeholder="2019-08-06 17:00" @click="timeChange" />
       </li>
       <li>
         <span>面试地址</span>
@@ -39,51 +33,14 @@ export default {
   data() {
     return {};
   },
-  computed: {
-    const date = new Date()
-    const years = []
-    const months = []
-    const days = []
-    for (let i = 1990; i <= date.getFullYear(); i++) {
-      years.push(i)
-    }
-    for (let i = 1 ; i <= 12; i++) {
-      months.push(i)
-    }
-
-    for (let i = 1 ; i <= 31; i++) {
-      days.push(i)
-    }
-
-    Page({
-      data: {
-        years: years,
-        year: date.getFullYear(),
-        months: months,
-        month: 2,
-        days: days,
-        day: 2,
-        value: [9999, 1, 1],
-      },
-      bindChange: function(e) {
-        const val = e.detail.value
-        this.setData({
-          year: this.data.years[val[0]],
-          month: this.data.months[val[1]],
-          day: this.data.days[val[2]]
-        })
-      }
-    })
-  },
+  computed: {},
   methods: {
     siteChange() {
       wx.navigateTo({
         url: "/pages/siteList/main"
       });
     },
-    timeChange(){
-      
-    }
+    timeChange() {}
   },
   created() {},
   mounted() {}
