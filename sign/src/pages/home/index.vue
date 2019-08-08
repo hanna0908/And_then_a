@@ -4,7 +4,7 @@
       <cover-view class="location" @click="location">
         <cover-view class="iconfont icon-weizhi" />
       </cover-view>
-      <cover-view class="user_info">
+      <cover-view class="user_info" @click="userChange">
         <cover-view class="iconfont icon-ziyuan" />
       </cover-view>
     </map>
@@ -39,8 +39,12 @@ export default {
     },
     ...mapActions({
       location: "home/getLocation"
-      
-    })
+    }),
+    userChange() {
+      wx.navigateTo({
+        url: "/pages/personalCenter/main"
+      });
+    }
   },
   created() {},
   mounted() {}

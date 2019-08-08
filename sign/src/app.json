@@ -3,8 +3,9 @@
     "pages/home/main",
     "pages/interviewState/main",
     "pages/interviewList/main",
-    "pages/interviewLocation/main",
+    "pages/interviewDetail/main",
     "pages/addInterview/main",
+    "pages/personalCenter/main",
     "pages/siteList/main"
   ],
   "window": {

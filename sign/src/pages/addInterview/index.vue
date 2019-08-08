@@ -1,52 +1,252 @@
 <template>
-  <div>
+  <form @submit="submit" report-submit>
     <h4>面试信息</h4>
     <ul class="interview">
       <li>
         <span>公司名称</span>
-        <input type="text" placeholder="请输入名称" />
+        <input type="text" v-model="current.company" placeholder="请输入名称" focus />
       </li>
       <li>
         <span>公司电话</span>
-        <input type="text" placeholder="请输入面试联系人电话" />
+        <input type="number" v-model="current.phone" placeholder="请输入面试联系人电话" maxlength="11" />
       </li>
-      <li>
+      <li class="interview_time">
         <span>面试时间</span>
-        <input type="text" placeholder="2019-08-06 17:00" @click="timeChange" />
+        <picker
+          mode="multiSelector"
+          :range="dateRange"
+          :value="info.date"
+          @change="dateChange"
+          @columnchange="columnChange"
+        >
+          <view class="time">{{dateShow}}</view>
+        </picker>
+        <i class="iconfont icon-jinggao" @click="hint"></i>
       </li>
       <li>
         <span>面试地址</span>
-        <input type="text" placeholder="请选择面试地址" @click="siteChange" />
+        <input
+          type="text"
+          placeholder="请选择面试地址"
+          @click="siteChange"
+          v-model="current.address.address"
+        />
       </li>
     </ul>
     <h4>备注信息</h4>
     <div class="contBox">
-      <textarea class="txt" />
+      <textarea
+        type="text"
+        v-model="current.description"
+        class="txt"
+        placeholder="备注信息(可选，100个字以内)"
+      />
     </div>
-    <button class="btn">确认</button>
-  </div>
+    <button :class="btnEnable?'': 'disable'" form-type="submit">确认</button>
+  </form>
 </template>
 <script>
+import { mapActions, mapState, mapMutations } from "vuex";
+import moment from "moment";
+const range = [
+  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  ["00分", "10分", "20分", "30分", "40分", "50分"]
+];
 export default {
   props: {},
   components: {},
   data() {
-    return {};
+    return {
+      info: {
+        date: [0, 0, 0]
+      }
+    };
   },
-  computed: {},
+  computed: {
+    ...mapState({
+      current: state => state.addressList.current,
+      list: state => state.addressList.list
+    }),
+    btnEnable() {
+      // 判断公司名称是否为空
+      if (!this.current.company) {
+        return false;
+      }
+      // 判断手机号是否符合规范
+      if (
+        !/^1(3|4|5|7|8)\d{9}$/.test(this.current.phone) ||
+        !/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/.test(this.current.phone)
+      ) {
+        return false;
+      }
+      // 判断公司地址
+      if (!this.current.address.address) {
+        return false;
+      }
+      return true;
+    },
+    // 处理面试日期
+    dateRange() {
+      let dateRange = [...range];
+      // 如果时间是今天，过滤掉现在之前的小时
+      if (!this.info.date[0]) {
+        dateRange[1] = dateRange[1].filter(item => {
+          return item > moment().hour();
+        });
+      } else {
+        dateRange[1] = range[1];
+      }
+      // 格式化小时
+      dateRange[1] = dateRange[1].map(item => {
+        return item + "点";
+      });
+      // 计算当前日期之后的十天
+      dateRange[0] = dateRange[0].map(item => {
+        return (
+          moment()
+            .add(item, "days")
+            .date() + "号"
+        );
+      });
+      return dateRange;
+    },
+    // 显示的日期
+    dateShow() {
+      return moment()
+        .add(
+          moment().hour() == 23 ? this.info.date[0] - 1 : this.info.date[0],
+          "d"
+        )
+        .add(this.info.date[1] + 1, "h")
+        .minute(this.info.date[2] * 10)
+        .format("YYYY-MM-DD HH:mm");
+    }
+  },
   methods: {
+    ...mapMutations({
+      updateState: "addressList/updateState"
+    }),
+    ...mapActions({
+      submitInterview: "addressList/submit"
+    }),
+    //跳转地址列表
     siteChange() {
       wx.navigateTo({
         url: "/pages/siteList/main"
       });
     },
-    timeChange() {}
+    // 监听多列选择器每列变化
+    columnChange(e) {
+      let { column, value } = e.target;
+      let date = [...this.info.date];
+      date[column] = value;
+      this.info.date = date;
+    },
+    hint() {
+      wx.showToast({
+        title: "在面试前一个小时我们会通知你哦", //提示的内容,
+        icon: "none" //图标,
+      });
+    },
+    // // 提交添加面试
+    async submit(e) {
+      let company = this.current.company;
+      let phone =
+        !/^1(3|4|5|7|8)\d{9}$/.test(this.current.phone) ||
+        !/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/.test(this.current.phone);
+      let address = this.current.address.address;
+      // 判断公司名称是否为空
+      if (!company) {
+        wx.showToast({
+          title: "请输入公司名称", //提示的内容,
+          icon: "none" //图标,
+        });
+        return;
+      }
+      // 判断手机号是否符合规范
+      if (phone) {
+        wx.showToast({
+          title: "请输入面试联系人的手机或座机", //提示的内容,
+          icon: "none" //图标,
+        });
+        return;
+      }
+      // 判断公司地址
+      if (!address) {
+        wx.showToast({
+          title: "请选择公司地址", //提示的内容,
+          icon: "none" //图标,
+        });
+        return;
+      }
+      // 添加时间戳到表单
+      this.current.start_time = moment(this.dateShow).unix() * 1000;
+      //   // 添加form_id
+      this.current.form_id = e.target.formId;
+      let data = await this.submitInterview(this.current);
+      if (data.code == 0) {
+        wx.showModal({
+          title: "温馨提示", //提示的标题,
+          content: data.msg, //提示的内容,
+          showCancel: false,
+          confirmText: "确定", //确定按钮的文字，默认为取消，最多 4 个字符,
+          confirmColor: "#197DBF", //确定按钮的文字颜色,
+          success: res => {
+            if (res.confirm) {
+              this.updateState({
+                form_id: "",
+                company: "",
+                address: "",
+                phone: ""
+              });
+              wx.navigateTo({ url: "/pages/interviewList/main" });
+            }
+          }
+        });
+      } else {
+        wx.showToast({
+          title: data.msg, //提示的内容,
+          icon: "fail" //图标,
+        });
+      }
+    }
   },
-  created() {},
+  created() {
+    // 如果当前时间是十一点之后，过滤掉今天
+    if (moment().hour() == 23) {
+      this.info.date = [1, 0, 0];
+    }
+  },
   mounted() {}
 };
 </script>
-<style scoped lang="">
+<style scoped lang="scss">
 .interview {
   background: #ffff;
   border-bottom: 1px solid #ccc;
@@ -55,13 +255,37 @@ export default {
   font-weight: 500;
 }
 .interview li {
+  width: 720rpx;
+  height: 88rpx;
+  margin-left: 30rpx;
+  border-bottom: 1rpx solid #eee;
   display: flex;
-  height: 100rpx;
-  line-height: 100rpx;
-  border-bottom: 1px solid #ccc;
-  margin-left: 20rpx;
-  color: #666;
+  align-items: center;
+  justify-content: space-between;
+  span {
+    color: #666;
+    width: 170rpx;
+    font-size: 30rpx;
+  }
+  input,
+  picker {
+    flex: 1;
+    font-size: 30rpx;
+    color: #333;
+    height: 88rpx;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-right: 30rpx;
+    box-sizing: border-box;
+  }
+  .time {
+    width: 100%;
+    line-height: 88rpx;
+    margin-left: 46rpx;
+  }
 }
+
 .interview li input {
   margin-left: 24px;
   height: 100rpx;
@@ -71,27 +295,39 @@ export default {
 .interview li:last-child {
   border-bottom: none;
 }
+.interview_time {
+  justify-content: space-between;
+  margin-left: 20rpx;
+}
+.icon-jinggao {
+  color: #197dbf;
+  font-size: 70rpx;
+  margin-right: 20rpx;
+}
 h4 {
   height: 90rpx;
   line-height: 90rpx;
   background: #f6f6f6;
   padding-left: 20rpx;
 }
-.btn {
-  height: 120rpx;
-  background: #999999;
-  line-height: 120rpx;
-  color: aliceblue;
+
+button {
+  margin-top: 50rpx;
+  color: #fff;
+  background: #197dbf;
 }
-.contBox {
-  width: 100%;
-  height: auto;
-  padding: 36rpx;
+button.disable {
+  background: #999;
 }
-.txt {
-  width: 90%;
-  border: 1px solid #9999;
-  margin-left: 2rpx;
-  border-radius: 8rpx;
+textarea {
+  font-size: 30rpx;
+  color: #333;
+  width: 690rpx;
+  height: 200rpx;
+  margin: 30rpx;
+  box-sizing: border-box;
+  padding: 10rpx;
+  border: 1rpx solid #c0c0c0;
+  border-radius: 5rpx;
 }
 </style>

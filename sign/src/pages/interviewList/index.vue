@@ -1,35 +1,48 @@
 <template>
   <div class="listBox">
     <ul class="status">
-      <li>未打卡</li>
-      <li>已打卡</li>
-      <li>已放弃</li>
-      <li>全部</li>
+      <li
+        @click="tabChange(index)"
+        v-for="(item, index) in types"
+        :key="index"
+        :class="(active+3)%4===index?'active':''"
+      >{{item}}</li>
     </ul>
-    <ul class="main">
-      <li>
-        <div class="address">
-          <h3>北京八维研修学院</h3>
-          <span class="no_begin">未开始</span>
-        </div>
-        <p class="detailed_address">北京市海淀区上地</p>
-        <div class="time">
-          <h3>面试时间:2019-08-06</h3>
-          <span class="no_remind">未提醒</span>
-        </div>
-      </li>
-    </ul>
+    <SingList :list="list"></SingList>
   </div>
 </template>
 <script>
+import { mapActions, mapState, mapMutations } from "vuex";
+import moment from "moment";
+import SingList from "@/components/singList";
 export default {
   props: {},
-  components: {},
+  components: { SingList },
   data() {
-    return {};
+    return {
+      types: ["未打开", "已打卡", "已放弃", "全部"]
+    };
   },
-  computed: {},
-  methods: {},
+  computed: {
+    ...mapState({
+      // page: state => state.interviewList.page,
+      // hasMore: state => state.interviewList.hasMore,
+      list: state => state.interviewList.list,
+      active: state => state.interviewList.active
+    })
+  },
+  methods: {
+    ...mapMutations({
+      updateState: "interviewList/updateState"
+    }),
+    ...mapActions({
+      getList: "interviewList/getList"
+    }),
+    tabChange(index) {
+      this.updateState({ active: (index + 1) % 4, page: 1 });
+      this.getList();
+    }
+  },
   created() {},
   mounted() {}
 };
@@ -43,47 +56,29 @@ export default {
   background: #ffffff;
 }
 .status {
-  border-top: 1px solid #dddd;
-  border-bottom: 20rpx solid #dddd;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #fff;
+  z-index: 99;
   width: 100%;
+  height: 88rpx;
   display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-top: 1px solid #eee;
 }
 .status li {
   width: 25%;
-  height: 96rpx;
-  line-height: 96rpx;
+  line-height: 88rpx;
   text-align: center;
+  box-sizing: border-box;
+  border-bottom: 2rpx solid #fff;
 }
-.main {
-  flex: 1;
-  width: 100%;
-}
-.main li {
-  display: flex;
-  flex-direction: column;
-  padding: 24rpx 40rpx;
-}
-.main li .address {
-  display: flex;
-  justify-content: space-between;
-}
-.no_begin {
-  background: #f4f4f4;
-  color: #909399;
-  padding: 6rpx 10rpx;
-}
-.no_remind {
-  background: #fef0f0;
-  color: #f56c6c;
-  padding: 6rpx 10rpx;
-}
-.detailed_address {
-  color: #909399;
-  margin: 20rpx 0;
-}
-.time {
-  color: #6666;
-  display: flex;
-  justify-content: space-between;
+.status li.active {
+  color: #197dbf;
+  line-height: 88rpx;
+  font-weight: 500;
+  border-bottom: 3rpx solid #197dbf;
 }
 </style>
