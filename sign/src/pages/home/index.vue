@@ -1,13 +1,27 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-09 00:54:47
+ * @LastEditTime: 2019-08-10 00:20:12
+ * @LastEditors: Please set LastEditors
+ -->
 <template>
   <div class="wrap">
-    <map id="map" show-location :longitude="longitude" :latitude="latitude" :markers="markers">
+    <div class="map">
+      <MyMap class="map" :reLocation="reLocation" />
+      <cover-view class="user_info" @click="userChange">
+        <cover-view class="iconfont icon-ziyuan" />
+      </cover-view>
+    </div>
+
+    <!-- <map id="map" show-location :longitude="longitude" :latitude="latitude" :markers="markers">
       <cover-view class="location" @click="location">
         <cover-view class="iconfont icon-weizhi" />
       </cover-view>
       <cover-view class="user_info" @click="userChange">
         <cover-view class="iconfont icon-ziyuan" />
       </cover-view>
-    </map>
+    </map>-->
 
     <footer class="footer" @click="addexamChange">添加面试</footer>
   </div>
@@ -17,7 +31,9 @@ import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
-      markers: []
+      markers: [],
+      // 用户当前位置
+      reLocation: false
     };
   },
   props: {},
@@ -32,6 +48,8 @@ export default {
     })
   },
   methods: {
+    // 点击标注物
+    marketTap(e) {},
     addexamChange() {
       wx.navigateTo({
         url: "/pages/addInterview/main"
@@ -57,22 +75,21 @@ export default {
   display: flex;
   flex-direction: column;
 }
+.map {
+  width: 100%;
+  height: 100%;
+  /* padding-bottom: 100rpx; */
+  box-sizing: border-box;
+  display: flex;
+  position: relative;
+}
 .tit {
   height: 90rpx;
   line-height: 90rpx;
 }
-#map {
-  flex: 1;
-  width: 100%;
-}
-.location {
-  position: fixed;
-  bottom: 140rpx;
-  left: 30rpx;
-}
 .user_info {
-  position: fixed;
-  bottom: 140rpx;
+  position: absolute;
+  bottom: 60rpx;
   right: 30rpx;
   width: 96rpx;
   height: 96rpx;
@@ -84,11 +101,6 @@ export default {
   color: #197dbf;
   text-align: center;
   line-height: 96rpx;
-}
-.location .icon-weizhi {
-  color: #197dbf;
-  font-size: 70rpx;
-  font-weight: 600;
 }
 .footer {
   height: 110rpx;

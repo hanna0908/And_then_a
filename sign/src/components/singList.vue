@@ -1,7 +1,14 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-09 00:54:47
+ * @LastEditTime: 2019-08-09 11:59:21
+ * @LastEditors: Please set LastEditors
+ -->
 <template>
   <div class="wrap">
     <ul class="main" v-if="list.length">
-      <li v-for="item in list" :key="item.id" @click="goDetail(item.id)">
+      <li v-for="item in list" :key="item.id" @click="goDetails(item.id)">
         <div class="address">
           <span>{{item.company}}</span>
           <span
@@ -9,7 +16,7 @@
             :class="'tag'+(item.status+2)"
           >{{item.status?item.status==1?'已放弃':'未开始':'已打卡'}}</span>
         </div>
-        <div class="detailed_address">{{item.address+""}}</div>
+        <div class="detailed_address">{{item.address.address}}</div>
         <div class="time">
           <span>面试时间:{{item.start_time}}</span>
           <span class="no_remind" :class="'tag'+(2-item.status)">{{item.remind?'未提醒':'已提醒'}}</span>
@@ -21,6 +28,7 @@
 </template>
 <script>
 import moment from "moment";
+import { mapActions } from "vuex";
 export default {
   props: {
     list: {
@@ -34,7 +42,11 @@ export default {
   },
   computed: {},
   methods: {
-    goDetail(id) {
+    ...mapActions({
+      goDetail: "interviewList/goDetail"
+    }),
+    goDetails(id) {
+      this.goDetail(id);
       wx.navigateTo({ url: "/pages/interviewDetail/main?id=" + id });
     }
   },

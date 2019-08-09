@@ -6,6 +6,7 @@ import home from "./modules/home";
 import siteList from "./modules/siteList";
 import addressList from "./modules/addressList";
 import interviewList from "./modules/interviewList";
+import user from './modules/user'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -13,7 +14,8 @@ export default new Vuex.Store({
         home,
         siteList,
         addressList,
-        interviewList
+        interviewList,
+        user
     },
     plugin: [CreateLogger()]
 })

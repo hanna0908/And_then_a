@@ -1,7 +1,7 @@
 import fly from '@/utils/request';
 // 添加面试
 export let addSign = params => {
-    console.log(params, "111111")
+    // console.log(params, "111111")
     return fly.post('/sign', params);
 }
 
@@ -12,15 +12,13 @@ export let getSignList = params => {
 
 // 获取面试详情
 export let getSignDetail = id => {
-    return fly.get('/sign/' + id);
+    console.log(id, 'id')
+    return fly.get(`/sign/${id}`);
 }
 
 // 更新面试状态
 export let updateSignDetail = (id, params) => {
+    console.log(id, params)
     return fly.put('/sign/' + id, params);
 }
 
-// 解密数据
-export let decrypt = params => {
-    return fly.post('/user/decrypt', params)
-}

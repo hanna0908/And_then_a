@@ -1,3 +1,10 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-09 00:54:47
+ * @LastEditTime: 2019-08-09 15:02:55
+ * @LastEditors: Please set LastEditors
+ -->
 <template>
   <div class="listBox">
     <ul class="status">
@@ -20,7 +27,7 @@ export default {
   components: { SingList },
   data() {
     return {
-      types: ["未打开", "已打卡", "已放弃", "全部"]
+      types: ["未开始", "已打卡", "已放弃", "全部"]
     };
   },
   computed: {

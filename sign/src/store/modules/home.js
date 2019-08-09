@@ -15,6 +15,7 @@ const mutations = {
 //模块内的异步改变
 const actions = {
     getLocation({ commit }, payload) {
+        console.log("1111111222")
         wx.getLocation({
             type: 'wgs84',
             success(res) {
