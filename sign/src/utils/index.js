@@ -93,12 +93,12 @@ const throttle = function (func, delay) {
     }
   }
 }
-export { throttle, debounce }
 
 export default {
   formatNumber,
   formatTime,
   getLocation,
   getAuth,
-  debounce
+  debounce,
+  throttle
 }
