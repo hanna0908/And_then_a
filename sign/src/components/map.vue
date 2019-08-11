@@ -2,26 +2,15 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 20:27:07
- * @LastEditTime: 2019-08-10 00:16:52
+ * @LastEditTime: 2019-08-11 21:25:36
  * @LastEditors: Please set LastEditors
  -->
-<template class="wrap">
+<template>
   <div class="wrap">
-    <map
-      id="map"
-      :longitude="location.longitude"
-      :latitude="location.latitude"
-      subkey="X7RBZ-MMOKR-UQEWJ-WSCXC-IVXVK-IFFLL"
-      show-location
-      show-compass
-      :circles="circle"
-      :include-points="points"
-      :markers="markers"
-      @markertap="markertap"
-      @regionchange="regionChange"
-    ></map>
+    <map id="map" :longitude="longitude" :latitude="latitude" show-location :markers="markers"></map>
     <cover-view class="location">
-      <cover-view class="iconfont icon-weizhi" @click="goCurrent" />
+      <img src="/static/images/location.png" alt @click="goCurrents" />
+      <!-- <cover-view class="iconfont icon-weizhi" @click="goCurrents" /> -->
     </cover-view>
   </div>
 </template>
@@ -34,10 +23,7 @@ export default {
   components: {},
   data() {
     return {
-      location: {
-        latitude: 23.099994,
-        longitude: 113.32452
-      },
+      location: {},
       distance: 0
     };
   },
@@ -45,90 +31,18 @@ export default {
     ...mapState({
       longitude: state => state.home.longitude,
       latitude: state => state.home.latitude
-    }),
-    points() {
-      return [this.location, ...this.markers];
-    },
-    circle() {
-      if (!this.markers.length) {
-        return [];
-      } else {
-        return [
-          {
-            ...this.markers[0],
-            color: this.distance > 100 ? "#C9394A" : "#197DBF",
-            fillColor: "rgba(0,0,0, .3)",
-            radius: 100,
-            strokeWidth: 2
-          }
-        ];
-      }
-    }
-  },
-  watch: {
-    reLocation() {
-      // 检测重新定位当前位置
-      this.goCurrent();
-    }
+    })
   },
   methods: {
     ...mapActions({
-      location: "home/getLocation"
+      goCurrents: "home/getLocation"
     })
   },
-  props: {
-    markers: {
-      type: Array,
-      default: []
-    },
-    markertap: {
-      type: Function,
-      default: () => {}
-    },
-    reginonChange: {
-      type: Function,
-      default: () => {}
-    },
-    reLocation: {
-      type: Boolean,
-      default: false
-    },
-    updateDistance: {
-      typef: Function,
-      default: () => {}
-    }
-  },
-  mounted() {
-    this.goCurrent();
-  },
-  methods: {
-    goCurrent() {
-      getAuth("scope.userLocation", async () => {
-        let location = await getLocation();
-        this.location = location;
-
-        console.log("scope.userLocation...", this.location, this.markers[0]);
-        // 重新计算距离
-        if (this.updateDistance) {
-          this.distance = getDistance(
-            this.location.latitude,
-            this.location.longitude,
-            this.markers[0].latitude,
-            this.markers[0].longitude
-          );
-          this.updateDistance(this.distance);
-        }
-      });
-    }
-  },
+  mounted() {},
   created() {}
 };
 </script>
 <style scoped lang="">
-div {
-  position: relative;
-  height: 100%;
-}
 map {
   width: 100%;
   height: 100%;
@@ -136,13 +50,12 @@ map {
 }
 
 .location {
-  position: absolute;
+  position: fixed;
   z-index: 1001;
-  position: absolute;
-  bottom: 60rpx;
+  bottom: 170rpx;
   left: 30rpx;
 }
-.location .icon-weizhi {
+.location img {
   color: #197dbf;
   font-size: 70rpx;
   font-weight: 600;

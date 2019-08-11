@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: hn
  * @Date: 2019-08-09 20:05:48
- * @LastEditTime: 2019-08-10 00:17:44
+ * @LastEditTime: 2019-08-11 21:09:42
  * @LastEditors: Please set LastEditors
  -->
 <template>
@@ -33,6 +33,9 @@ export default {
 </script>
 <style scoped lang="scss">
 .wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   height: 100%;
 }
 .map {
@@ -54,5 +57,9 @@ export default {
   background: #020816;
   color: aliceblue;
   text-align: center;
+}
+.add {
+  background: #020816;
+  color: aliceblue;
 }
 </style>

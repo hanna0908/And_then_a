@@ -22,3 +22,4 @@ export let updateSignDetail = (id, params) => {
     return fly.put('/sign/' + id, params);
 }
 
+

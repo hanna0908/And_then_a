@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: hn
  * @Date: 2019-08-09 00:54:47
- * @LastEditTime: 2019-08-09 21:33:32
+ * @LastEditTime: 2019-08-10 09:55:42
  * @LastEditors: Please set LastEditors
  -->
 <template>
@@ -39,7 +39,7 @@
       <div class="mask">
         <p>为了更好地使用我们的服务,我们需要获取你的手机号码</p>
         <button v-if="!hasPhone" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">同意</button>
-        <button v-if="showSetting" open-type="openSetting">打开设置页面</button>
+        <!-- <button v-if="showSetting" open-type="openSetting">打开设置页面</button> -->
       </div>
     </div>
   </div>

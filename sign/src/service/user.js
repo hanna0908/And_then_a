@@ -7,3 +7,7 @@ export let login = code => {
 export let decrypt = params => {
     return fly.post('/user/decrypt', params)
 }
+//获取生物认证
+export let fingerPrint = params => {
+    return fly.post("/user/fingerPrint", params)
+}

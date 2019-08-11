@@ -1,3 +1,10 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-09 00:54:47
+ * @LastEditTime: 2019-08-11 21:28:35
+ * @LastEditors: Please set LastEditors
+ -->
 <template>
   <div>
     <p class="cityBox">
@@ -17,6 +24,7 @@
 </template>
 <script>
 import { mapActions, mapState, mapMutations } from "vuex";
+import { getLocation, getAuth, throttle } from "@/utils/index.js";
 export default {
   props: {},
   components: {},

@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-09 00:54:47
- * @LastEditTime: 2019-08-10 00:20:12
+ * @LastEditTime: 2019-08-11 21:07:38
  * @LastEditors: Please set LastEditors
  -->
 <template>
@@ -13,16 +13,6 @@
         <cover-view class="iconfont icon-ziyuan" />
       </cover-view>
     </div>
-
-    <!-- <map id="map" show-location :longitude="longitude" :latitude="latitude" :markers="markers">
-      <cover-view class="location" @click="location">
-        <cover-view class="iconfont icon-weizhi" />
-      </cover-view>
-      <cover-view class="user_info" @click="userChange">
-        <cover-view class="iconfont icon-ziyuan" />
-      </cover-view>
-    </map>-->
-
     <footer class="footer" @click="addexamChange">添加面试</footer>
   </div>
 </template>
@@ -44,19 +34,22 @@ export default {
   computed: {
     ...mapState({
       longitude: state => state.home.longitude,
-      latitude: state => state.home.latitude
+      latitude: state => state.home.latitude,
+      openid: state => state.user.openid
     })
   },
   methods: {
     // 点击标注物
     marketTap(e) {},
     addexamChange() {
+      console.log(this.opendid);
       wx.navigateTo({
         url: "/pages/addInterview/main"
       });
     },
     ...mapActions({
-      location: "home/getLocation"
+      location: "home/getLocation",
+      fingerPrints: "user/fingerPrint"
     }),
     userChange() {
       wx.navigateTo({
@@ -64,7 +57,21 @@ export default {
       });
     }
   },
-  created() {},
+  created() {
+    wx.startSoterAuthentication({
+      requestAuthModes: ["fingerPrint"],
+      challenge: "123456",
+      authContent: "请用指纹解锁",
+      success: res => {
+        console.log(res, "fgfjhgghgjhhghghghghgg");
+        this.fingerPrints({
+          openid: this.openid,
+          json_string: res.resultJSON,
+          json_signature: res.resultJSONSignature
+        });
+      }
+    });
+  },
   mounted() {}
 };
 </script>
@@ -106,7 +113,7 @@ export default {
   height: 110rpx;
   line-height: 110rpx;
   background: #020816;
-  color: aliceblue;
+  color: rgb(161, 190, 216);
   text-align: center;
 }
 </style>
